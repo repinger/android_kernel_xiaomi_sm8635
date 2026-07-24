@@ -34,6 +34,8 @@ __all:
 # descending is started. They are now explicitly listed as the
 # prepare rule.
 
+export LLVM=1
+
 ifneq ($(sub_make_done),1)
 
 # Do not use make's built-in rules and variables
