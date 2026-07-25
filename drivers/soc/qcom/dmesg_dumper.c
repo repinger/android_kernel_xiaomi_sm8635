@@ -41,7 +41,7 @@ static void qcom_ddump_to_shm(struct kmsg_dumper *dumper,
 	kmsg_dump_rewind(&qdd->iter);
 	memset(qdd->base, 0, qdd->size);
 	kmsg_dump_get_buffer(&qdd->iter, false, qdd->base, qdd->size, &len);
-	dev_warn(qdd->dev, "size of dmesg logbuf logged = %lld\n", len);
+	dev_warn(qdd->dev, "size of dmesg logbuf logged = %zu\n", len);
 }
 
 static int qcom_ddump_gh_panic_handler(struct notifier_block *nb,
@@ -150,8 +150,8 @@ static int qcom_ddump_share_mem(struct qcom_dmesg_dumper *qdd, gh_vmid_t self,
 	ret = qcom_scm_assign_mem(qdd->res.start, resource_size(&qdd->res),
 			     &src_vmid, dst_vmlist, ARRAY_SIZE(dst_vmlist));
 	if (ret) {
-		dev_err(qdd->dev, "qcom_scm_assign_mem addr=%x size=%u failed: %d\n",
-		       qdd->res.start, qdd->size, ret);
+		dev_err(qdd->dev, "qcom_scm_assign_mem addr=%pa size=%llu failed: %d\n",
+		       &qdd->res.start, qdd->size, ret);
 		return ret;
 	}
 
@@ -176,14 +176,14 @@ static int qcom_ddump_share_mem(struct qcom_dmesg_dumper *qdd, gh_vmid_t self,
 	ret = ghd_rm_mem_share(GH_RM_MEM_TYPE_NORMAL, 0, qdd->label,
 			      acl, sgl, NULL, &qdd->memparcel);
 	if (ret) {
-		dev_err(qdd->dev, "Gunyah mem share addr=%x size=%u failed: %d\n",
-		       qdd->res.start, qdd->size, ret);
+		dev_err(qdd->dev, "Gunyah mem share addr=%pa size=%llu failed: %d\n",
+		       &qdd->res.start, qdd->size, ret);
 		/* Attempt to give resource back to HLOS */
 		assign_mem_ret = qcom_scm_assign_mem(qdd->res.start, resource_size(&qdd->res),
 				&dst_vmid, src_vmlist, ARRAY_SIZE(src_vmlist));
 		if (assign_mem_ret) {
-			dev_err(qdd->dev, "qcom_scm_assign_mem addr=%x size=%u failed: %d\n",
-				qdd->res.start, qdd->size, ret);
+			dev_err(qdd->dev, "qcom_scm_assign_mem addr=%pa size=%llu failed: %d\n",
+				&qdd->res.start, qdd->size, ret);
 		}
 	}
 
@@ -438,7 +438,7 @@ static int qcom_ddump_alive_log_probe(struct qcom_dmesg_dumper *qdd)
 
 	shm_min_size = LOG_LINE_MAX + DDUMP_GET_SHM_HDR;
 	if (qdd->size < shm_min_size) {
-		dev_err(dev, "Shared memory size should greater than %d\n", shm_min_size);
+		dev_err(dev, "Shared memory size should greater than %zu\n", shm_min_size);
 		return -EINVAL;
 	}
 

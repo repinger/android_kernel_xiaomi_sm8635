@@ -167,7 +167,7 @@ static int msm_show_resume_probe(struct platform_device *pdev)
 {
 	base = of_iomap(pdev->dev.of_node, 0);
 	if (IS_ERR(base)) {
-		pr_err("%pOF: error %d: unable to map GICD registers\n",
+		pr_err("%pOF: error %ld: unable to map GICD registers\n",
 				pdev->dev.of_node, PTR_ERR(base));
 		return -ENXIO;
 	}

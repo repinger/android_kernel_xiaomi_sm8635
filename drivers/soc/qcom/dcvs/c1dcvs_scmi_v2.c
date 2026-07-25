@@ -130,7 +130,7 @@ static ssize_t show_##name(struct kobject *kobj,			\
 	if (ret < 0)							\
 		return ret;						\
 									\
-	return scnprintf(buf, PAGE_SIZE, "%lu\n", le32_to_cpu(var));	\
+	return scnprintf(buf, PAGE_SIZE, "%u\n", le32_to_cpu(var));	\
 }									\
 
 /*
@@ -210,7 +210,7 @@ static ssize_t store_##name(struct kobject *kobj,			\
 		i++;							\
 	}								\
 									\
-	pr_info("Input threshold :%lu for cluster :%lu\n", msg[1], msg[0]);\
+	pr_info("Input threshold :%u for cluster :%u\n", msg[1], msg[0]);\
 	ret = set_##name(msg, sizeof(msg));				\
 out:									\
 	kfree(s_orig);							\
@@ -237,7 +237,7 @@ static ssize_t show_##name(struct kobject *kobj,			\
 		vars[i] = le32_to_cpu(vars[i]);				\
 		if (!vars[i])						\
 			break;						\
-		tot += scnprintf(buf + tot, PAGE_SIZE - tot, "%lu\t", vars[i]);\
+		tot += scnprintf(buf + tot, PAGE_SIZE - tot, "%u\t", vars[i]);\
 	}								\
 	tot += scnprintf(buf + tot, PAGE_SIZE - tot, "\n");		\
 									\

@@ -951,11 +951,11 @@ static void fast_smmu_reserve_msi_iova(struct device *dev, struct dma_fast_smmu_
 
 	msi_iova_base = __fast_smmu_alloc_iova(fast, 0, msi_size);
 	if (msi_iova_base == DMA_MAPPING_ERROR) {
-		dev_err(dev, "iova allocator failed to reserve MSI range of size: 0x%x\n",
+		dev_err(dev, "iova allocator failed to reserve MSI range of size: %u\n",
 			msi_size);
 		goto out;
 	}
-	dev_dbg(dev, "iova allocator reserved 0x%lx-0x%lx for MSI\n", msi_iova_base,
+	dev_dbg(dev, "iova allocator reserved 0x%llx-0x%llx for MSI\n", msi_iova_base,
 		msi_iova_base + msi_size);
 	spin_unlock_irqrestore(&fast->lock, flags);
 

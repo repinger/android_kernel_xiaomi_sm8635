@@ -148,8 +148,8 @@ static int gh_panic_notifier_share_mem(struct gh_panic_notifier_dev *gpnd,
 	ret = qcom_scm_assign_mem(gpnd->res.start, gpnd->size, &src_vmid,
 				dst_vmlist, ARRAY_SIZE(dst_vmlist));
 	if (ret) {
-		dev_err(gpnd->dev, "qcom_scm_assign_mem addr=%x size=%u failed: %d\n",
-		       gpnd->res.start, gpnd->size, ret);
+		dev_err(gpnd->dev, "qcom_scm_assign_mem addr=%pa size=%llu failed: %d\n",
+		       &gpnd->res.start, gpnd->size, ret);
 		return ret;
 	}
 
@@ -174,14 +174,14 @@ static int gh_panic_notifier_share_mem(struct gh_panic_notifier_dev *gpnd,
 	ret = ghd_rm_mem_share(GH_RM_MEM_TYPE_NORMAL, 0, gpnd->label,
 			      acl, sgl, NULL, &gpnd->memparcel);
 	if (ret) {
-		dev_err(gpnd->dev, "Gunyah mem share addr=%x size=%u failed: %d\n",
-		       gpnd->res.start, gpnd->size, ret);
+		dev_err(gpnd->dev, "Gunyah mem share addr=%pa size=%llu failed: %d\n",
+		       &gpnd->res.start, gpnd->size, ret);
 		/* Attempt to give resource back to HLOS */
 		assign_mem_ret = qcom_scm_assign_mem(gpnd->res.start, gpnd->size, &dst_vmid,
 				src_vmlist, ARRAY_SIZE(src_vmlist));
 		if (assign_mem_ret) {
-			dev_err(gpnd->dev, "qcom_scm_assign_mem addr=%x size=%u failed: %d\n",
-				gpnd->res.start, gpnd->size, ret);
+			dev_err(gpnd->dev, "qcom_scm_assign_mem addr=%pa size=%llu failed: %d\n",
+				&gpnd->res.start, gpnd->size, ret);
 		}
 	}
 

@@ -744,7 +744,7 @@ static int wcd_usbss_usbc_event_changed(struct notifier_block *nb,
 		return -EINVAL;
 
 	priv->u_role = ((struct ucsi_glink_constat_info *)ptr)->u_role;
-	dev_info(dev, "%s: USB change event received, supply mode %d, usbc mode %ld, expected %d, usb role %d\n",
+	dev_info(dev, "%s: USB change event received, supply mode %d, usbc mode %d, expected %d, usb role %d\n",
 			__func__, acc, priv->usbc_mode.counter,
 			TYPEC_ACCESSORY_AUDIO, priv->u_role);
 
@@ -1743,7 +1743,7 @@ static int wcd_usbss_probe(struct i2c_client *i2c)
 	}
 
 	if (ARRAY_SIZE(supply_names) >= WCD_USBSS_SUPPLY_MAX) {
-		dev_err(priv->dev, "Unsupported number of supplies: %d\n",
+		dev_err(priv->dev, "Unsupported number of supplies: %zu\n",
 				ARRAY_SIZE(supply_names));
 		rc = -EINVAL;
 		goto err_data;

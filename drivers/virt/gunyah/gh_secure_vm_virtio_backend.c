@@ -501,7 +501,7 @@ loop_back:
 
 		vb_dev_put(vb_dev);
 
-		dev_dbg(vm->dev, "%s: get_drv_feat %d/%x ret %d\n",
+		dev_dbg(vm->dev, "%s: get_drv_feat %d/%llx ret %d\n",
 				VIRTIO_PRINT_MARKER, df.features_sel, features, ret);
 		if (ret)
 			return ret;
@@ -531,7 +531,7 @@ loop_back:
 		ret = get_queue_info(vb_dev->cap_id, qi.queue_sel, &qinfo);
 		vb_dev_put(vb_dev);
 
-		dev_dbg(vm->dev, "%s: get_queue_info %d: que_num %d que_ready %d que_desc %llx\n",
+		dev_dbg(vm->dev, "%s: get_queue_info %d: que_num %llu que_ready %llu que_desc %llx\n",
 			VIRTIO_PRINT_MARKER, qi.queue_sel, qinfo.queue_num,
 			qinfo.queue_ready, qinfo.queue_desc);
 		dev_dbg(vm->dev, "%s: que_driver %llx que_device %llx ret %d\n",
@@ -1343,7 +1343,7 @@ static int gh_virtio_mmio_init(gh_vmid_t vmid, const char *vm_name, gh_label_t l
 		return -ENODEV;
 	}
 
-	dev_dbg(vm->dev, "%s: vmid %d vm_name %s label %x cap_id %x irq %d base %pK size %d\n",
+	dev_dbg(vm->dev, "%s: vmid %d vm_name %s label %x cap_id %llx irq %d base %pK size %llu\n",
 		VIRTIO_PRINT_MARKER, vmid, vm_name, label, cap_id, linux_irq, (void *)base, size);
 
 	if (strnlen(vm_name, GH_VM_FW_NAME_MAX) == GH_VM_FW_NAME_MAX) {

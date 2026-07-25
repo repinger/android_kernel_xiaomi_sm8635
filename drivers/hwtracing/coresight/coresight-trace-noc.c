@@ -60,7 +60,7 @@ static ssize_t flush_status_show(struct device *dev,
 
 	val = readl_relaxed(drvdata->base + TRACE_NOC_CTRL);
 	spin_unlock(&drvdata->spinlock);
-	return scnprintf(buf, PAGE_SIZE, "%x\n", BMVAL(val, 2, 2));
+	return scnprintf(buf, PAGE_SIZE, "%lx\n", BMVAL(val, 2, 2));
 }
 static DEVICE_ATTR_RO(flush_status);
 
@@ -281,7 +281,7 @@ static int trace_noc_parse_of_data(struct trace_noc_drvdata *drvdata)
 		return -EINVAL;
 	}
 
-	dev_dbg(drvdata->dev, "Trace Noc ATID is %d\n", drvdata->atid);
+	dev_dbg(drvdata->dev, "Trace Noc ATID is %u\n", drvdata->atid);
 	return 0;
 }
 

@@ -68,8 +68,8 @@ static int gh_cpusys_vm_share_mem(struct gh_cpusys_vm_data *drv_data,
 	ret = qcom_scm_assign_mem(drv_data->res.start, resource_size(&drv_data->res), &srcvmids,
 			dst_vmlist, ARRAY_SIZE(dst_vmlist));
 	if (ret) {
-		dev_err(drv_data->dev, "%s: qcom_scm_assign_mem failed addr=%x size=%u err=%d\n",
-			__func__, drv_data->res.start, resource_size(&drv_data->res), ret);
+		dev_err(drv_data->dev, "%s: qcom_scm_assign_mem failed addr=%pa size=%llu err=%d\n",
+			__func__, &drv_data->res.start, (unsigned long long)resource_size(&drv_data->res), ret);
 		return ret;
 	}
 
@@ -94,8 +94,8 @@ static int gh_cpusys_vm_share_mem(struct gh_cpusys_vm_data *drv_data,
 	ret = ghd_rm_mem_share(GH_RM_MEM_TYPE_NORMAL, 0, drv_data->label,
 			acl, sgl, NULL, &drv_data->memparcel);
 	if (ret) {
-		dev_err(drv_data->dev, "%s: gh_rm_mem_share failed addr=%x size=%u err=%d\n",
-			__func__, drv_data->res.start, resource_size(&drv_data->res), ret);
+		dev_err(drv_data->dev, "%s: gh_rm_mem_share failed addr=%pa size=%llu err=%d\n",
+			__func__, &drv_data->res.start, (unsigned long long)resource_size(&drv_data->res), ret);
 		/* Attempt to give resource back to HLOS */
 		qcom_scm_assign_mem(drv_data->res.start, resource_size(&drv_data->res),
 				&dstvmids, src_vmlist, ARRAY_SIZE(src_vmlist));
@@ -181,8 +181,8 @@ static int gh_cpusys_vm_init(struct gh_cpusys_vm_data *drv_data)
 		return -EINVAL;
 	}
 
-	dev_dbg(drv_data->dev, "start:0x%x end:0x%x size:0x%x name:%s\n",
-		drv_data->res.start, drv_data->res.end, resource_size(&drv_data->res),
+	dev_dbg(drv_data->dev, "start:0x%pa end:0x%pa size:%llu name:%s\n",
+		&drv_data->res.start, &drv_data->res.end, (unsigned long long)resource_size(&drv_data->res),
 		drv_data->res.name);
 
 	/* Register memory with HYP */

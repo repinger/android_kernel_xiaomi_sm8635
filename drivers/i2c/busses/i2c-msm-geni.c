@@ -549,7 +549,7 @@ static inline void qcom_geni_i2c_calc_timeout(struct geni_i2c_dev *gi2c)
 							I2C_TIMEOUT_MIN_USEC;
 	gi2c->xfer_timeout = usecs_to_jiffies(xfer_max_usec);
 	I2C_LOG_DBG(gi2c->ipcl, false, gi2c->dev,
-		    "%s: us:%d jiffies:%d\n",
+		    "%s: us:%zu jiffies:%u\n",
 		    __func__, xfer_max_usec, gi2c->xfer_timeout);
 }
 
@@ -2509,7 +2509,7 @@ static int geni_i2c_execute_xfer(struct geni_i2c_dev *gi2c,
 				writel_relaxed(m_stat, gi2c->base + SE_GENI_M_IRQ_CLEAR);
 
 			I2C_LOG_ERR(gi2c->ipcl, true, gi2c->dev,
-				"I2C xfer timeout: %d\n", gi2c->xfer_timeout);
+				"I2C xfer timeout: %u\n", gi2c->xfer_timeout);
 			geni_i2c_err(gi2c, GENI_TIMEOUT);
 
 			/* WAR: Set flag to mark cancel pending if IOS bad */

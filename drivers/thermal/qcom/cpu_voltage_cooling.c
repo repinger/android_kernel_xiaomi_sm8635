@@ -170,7 +170,7 @@ static int build_unified_table(struct cc_limits_data *cc_cdev,
 		if (idy < 0)
 			idy = 0;
 		freq_map[idz].frequency[1] = table[min_idx][idy].frequency;
-		pr_info("freq1:%u freq2:%u\n", freq_map[idz].frequency[0],
+		pr_info("freq1:%lu freq2:%lu\n", freq_map[idz].frequency[0],
 				freq_map[idz].frequency[1]);
 	}
 

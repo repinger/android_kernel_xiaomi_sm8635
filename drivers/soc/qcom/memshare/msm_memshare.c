@@ -152,7 +152,7 @@ static int modem_notifier_cb(struct notifier_block *this, unsigned long code,
 		trace_rproc_qcom_event("modem", "QCOM_SSR_BEFORE_SHUTDOWN", "modem_notifier-enter");
 		bootup_request++;
 		dev_info(memsh_drv->dev,
-		"memshare: QCOM_SSR_BEFORE_SHUTDOWN: bootup_request:%d\n",
+		"memshare: QCOM_SSR_BEFORE_SHUTDOWN: bootup_request:%llu\n",
 		bootup_request);
 		for (i = 0; i < MAX_CLIENTS; i++)
 			memblock[i].alloc_request = 0;
@@ -175,7 +175,7 @@ static int modem_notifier_cb(struct notifier_block *this, unsigned long code,
 			if (memblock[i].free_memory > 0 &&
 					bootup_request >= 2) {
 				memblock[i].free_memory -= 1;
-				dev_dbg(memsh_drv->dev, "memshare: free_memory count: %d for client id: %d\n",
+				dev_dbg(memsh_drv->dev, "memshare: free_memory count: %d for client id: %u\n",
 					memblock[i].free_memory,
 					memblock[i].client_id);
 			}
@@ -240,7 +240,7 @@ static int modem_notifier_cb(struct notifier_block *this, unsigned long code,
 	}
 	mutex_unlock(&memsh_drv->mem_share);
 	dev_info(memsh_drv->dev,
-	"memshare: notifier_cb processed for code: %d\n", code);
+	"memshare: notifier_cb processed for code: %lu\n", code);
 
 	trace_rproc_qcom_event("modem", "modem_notifier", "exit");
 	return NOTIFY_DONE;
@@ -372,7 +372,7 @@ static void handle_alloc_generic_req(struct qmi_handle *handle,
 				mb->virtual_addr, mb->phy_addr, mb->size, mb->phy_addr);
 	}
 	dev_dbg(memsh_drv->dev,
-		"memshare_alloc: free memory count for client id: %d = %d\n",
+		"memshare_alloc: free memory count for client id: %u = %d\n",
 		memblock[index].client_id, memblock[index].free_memory);
 
 	memblock[index].sequence_id = alloc_req->sequence_id;
@@ -462,7 +462,7 @@ static void handle_free_generic_req(struct qmi_handle *handle,
 		struct memshare_hyp_mapping *source;
 
 		dev_dbg(memsh_drv->dev,
-			"memshare_free: hypervisor unmapping for free_req->client_id: %d - size: %d\n",
+			"memshare_free: hypervisor unmapping for free_req->client_id: %u - size: %u\n",
 			free_req->client_id, memblock[index].size);
 
 		source = &memblock[index].hyp_map_info;

@@ -239,7 +239,7 @@ struct cdsprm {
 	struct pm_qos_request		pm_qos_req;
 	unsigned int			qos_latency_us;
 	unsigned int			qos_max_ms;
-	unsigned int			compute_prio_idx;
+	enum cdsprm_compute_priority			compute_prio_idx;
 	struct mutex			npu_activity_lock;
 	bool				b_cx_limit_en;
 	unsigned int			b_npu_enabled;
@@ -334,7 +334,7 @@ int cdsprm_cxlimit_npu_limit_deregister(void)
 }
 EXPORT_SYMBOL(cdsprm_cxlimit_npu_limit_deregister);
 
-int cdsprm_compute_core_set_priority(unsigned int priority_idx)
+int cdsprm_compute_core_set_priority(enum cdsprm_compute_priority priority_idx)
 {
 	struct sysmon_msg_tx rpmsg_msg_tx;
 
@@ -349,7 +349,7 @@ int cdsprm_compute_core_set_priority(unsigned int priority_idx)
 		rpmsg_send(gcdsprm.rpmsgdev->ept,
 			&rpmsg_msg_tx,
 			sizeof(rpmsg_msg_tx));
-		pr_debug("Compute core priority set to %d\n",
+		pr_debug("Compute core priority set to %u\n",
 			priority_idx);
 	}
 
@@ -376,7 +376,7 @@ int cdsprm_compute_vtcm_test(unsigned int vtcm_test_data)
 		if (result)
 			pr_info("VTCM partition test failed\n");
 		else {
-			pr_info("VTCM partition test command set to %d\n",
+			pr_info("VTCM partition test command set to %u\n",
 				rpmsg_v2.fs.vtcm_partition.command);
 		}
 	}
@@ -427,7 +427,7 @@ int cdsprm_compute_vtcm_set_partition_map(unsigned int b_vtcm_partitioning)
 		if (result)
 			pr_info("VTCM partition and map failed\n");
 		else {
-			pr_info("VTCM partition and map info set to %d\n",
+			pr_info("VTCM partition and map info set to %u\n",
 					gcdsprm.b_vtcm_partitioning);
 		}
 	}
@@ -454,7 +454,7 @@ int cdsprm_resmgr_pdkill_config(unsigned int b_enable)
 			pr_info("Sending resmgr pdkill config failed: %d\n", result);
 		else {
 			gcdsprm.b_resmgr_pdkill_override = b_enable;
-			pr_info("resmgr pdkill config set to %d\n", b_enable);
+			pr_info("resmgr pdkill config set to %u\n", b_enable);
 		}
 	}
 
@@ -950,7 +950,7 @@ static int process_cdsp_request_thread(void *data)
 
 			if (gcdsprm.set_l3_freq_cached) {
 				gcdsprm.set_l3_freq_cached(l3_clock_khz);
-				pr_debug("Set L3 clock %d done\n",
+				pr_debug("Set L3 clock %u done\n",
 					l3_clock_khz);
 			}
 		} else if (msg && (msg->feature_id ==
@@ -1253,7 +1253,7 @@ static int cdsprm_compute_prio_read(void *data, u64 *val)
 
 static int cdsprm_compute_prio_write(void *data, u64 val)
 {
-	cdsprm_compute_core_set_priority((unsigned int)val);
+	cdsprm_compute_core_set_priority((enum cdsprm_compute_priority)val);
 
 	return 0;
 }
@@ -1306,7 +1306,7 @@ static int cdsprm_resmgr_pdkill_override_write(void *data, u64 val)
 {
 	int result = cdsprm_resmgr_pdkill_config((unsigned int)val);
 
-	pr_info("resmgr pdkill override %d sent to NSP, returned %d\n", val, result);
+	pr_info("resmgr pdkill override %llu sent to NSP, returned %d\n", val, result);
 
 	return result;
 }
@@ -1688,7 +1688,7 @@ static void print_dcvs_clients_votes(void)
 				dcvs_client_p[i].ceng_params.perf_mode ? "LOW" : "HIGH");
 
 		if (dcvs_client_p[i].ceng_params.bwBytePerSec)
-			pr_info("    Q6->CENG BW : %u bytes per second, Q6->CENG BW Usage Percentage : %u\n",
+			pr_info("    Q6->CENG BW : %llu bytes per second, Q6->CENG BW Usage Percentage : %u\n",
 					dcvs_client_p[i].ceng_params.bwBytePerSec,
 					dcvs_client_p[i].ceng_params.busbwUsagePercentage);
 

@@ -141,10 +141,10 @@ static int bcl_read_multi_register(struct bcl_device *bcl_perph, int16_t reg_off
 			       (bcl_perph->fg_bcl_addr + reg_offset),
 			       data, len);
 	if (ret < 0)
-		pr_err("Error reading reg base:0x%04x len:%ld err:%d\n",
+		pr_err("Error reading reg base:0x%04x len:%zu err:%d\n",
 				bcl_perph->fg_bcl_addr + reg_offset, len, ret);
 	else
-		pr_debug("Read register:0x%04x value:0x%02x len:%ld\n",
+		pr_debug("Read register:0x%04x value:0x%02x len:%zu\n",
 				bcl_perph->fg_bcl_addr + reg_offset,
 				*data, len);
 
@@ -779,7 +779,7 @@ static int bcl_get_ibat_ext_range_factor(struct platform_device *pdev,
 	}
 
 	if (len <= 0 || len > sizeof(uint32_t)) {
-		dev_err(&pdev->dev, "nvmem cell length out of range %d\n", len);
+		dev_err(&pdev->dev, "nvmem cell length out of range %zu\n", len);
 		kfree(buf);
 		return -EINVAL;
 	}
@@ -958,7 +958,7 @@ static int bcl_get_ibat_config(struct platform_device *pdev,
 	}
 
 	if (len <= 0 || len > sizeof(uint32_t)) {
-		dev_err(&pdev->dev, "nvmem cell length out of range %d\n", len);
+		dev_err(&pdev->dev, "nvmem cell length out of range %zu\n", len);
 		kfree(buf);
 		return -EINVAL;
 	}

@@ -264,6 +264,9 @@ static unsigned long dynamic_page_pool_shrink_scan(struct shrinker *shrinker,
 	return dynamic_page_pool_shrink(sc->gfp_mask, to_scan);
 }
 
+static gfp_t order_flags[] = {HIGH_ORDER_GFP, HIGH_ORDER_GFP,
+			      LOW_ORDER_GFP};
+
 struct dynamic_page_pool **dynamic_page_pool_create_pools(int vmid,
 							  prerelease_callback callback)
 {

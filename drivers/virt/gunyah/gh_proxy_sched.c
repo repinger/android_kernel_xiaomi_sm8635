@@ -629,7 +629,7 @@ int gh_poll_vcpu_run(gh_vmid_t vmid)
 						resp.vcpu_state, resp.vcpu_suspend_state);
 			if (ret == GH_ERROR_OK) {
 				if (resp.vcpu_state > GH_VCPU_STATE_BLOCKED)
-					printk_deferred("Unknown VCPU STATE: state=%d VCPU=%u of VM=%d\n",
+					printk_deferred("Unknown VCPU STATE: state=%llu VCPU=%u of VM=%d\n",
 							resp.vcpu_state, vcpu_id, vmid);
 				break;
 			}

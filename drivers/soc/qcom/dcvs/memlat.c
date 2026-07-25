@@ -512,7 +512,7 @@ static ssize_t store_cpucp_sample_ms(struct kobject *kobj,
 static ssize_t show_cpucp_sample_ms(struct kobject *kobj,
 				    struct attribute *attr, char *buf)
 {
-	return scnprintf(buf, PAGE_SIZE, "%lu\n", memlat_data->cpucp_sample_ms);
+	return scnprintf(buf, PAGE_SIZE, "%u\n", memlat_data->cpucp_sample_ms);
 }
 
 static ssize_t store_cpucp_log_level(struct kobject *kobj,
@@ -552,7 +552,7 @@ static ssize_t store_cpucp_log_level(struct kobject *kobj,
 static ssize_t show_cpucp_log_level(struct kobject *kobj,
 				    struct attribute *attr, char *buf)
 {
-	return scnprintf(buf, PAGE_SIZE, "%lu\n", memlat_data->cpucp_log_level);
+	return scnprintf(buf, PAGE_SIZE, "%u\n", memlat_data->cpucp_log_level);
 }
 
 static ssize_t store_flush_cpucp_log(struct kobject *kobj,
@@ -598,7 +598,7 @@ static ssize_t show_hlos_cpucp_offset(struct kobject *kobj,
 
 	hlos_ts = sched_clock()/1000;
 
-	return scnprintf(buf, PAGE_SIZE, "%ld\n", le64_to_cpu(cpucp_ts) - hlos_ts);
+	return scnprintf(buf, PAGE_SIZE, "%llu\n", (unsigned long long)(le64_to_cpu(cpucp_ts) - hlos_ts));
 }
 
 static ssize_t show_cur_freq(struct kobject *kobj,
@@ -612,7 +612,7 @@ static ssize_t show_cur_freq(struct kobject *kobj,
 	int ret;
 
 	if (!grp->cpucp_enabled)
-		return scnprintf(buf, PAGE_SIZE, "%lu\n", mon->cur_freq);
+		return scnprintf(buf, PAGE_SIZE, "%u\n", mon->cur_freq);
 
 	if (!ops)
 		return -ENODEV;
@@ -625,7 +625,7 @@ static ssize_t show_cur_freq(struct kobject *kobj,
 		return ret;
 	}
 	memcpy(&cur_freq, (void *)&msg, sizeof(cur_freq));
-	return scnprintf(buf, PAGE_SIZE, "%lu\n", le32_to_cpu(cur_freq));
+	return scnprintf(buf, PAGE_SIZE, "%u\n", le32_to_cpu(cur_freq));
 }
 
 static ssize_t show_adaptive_cur_freq(struct kobject *kobj,
@@ -638,7 +638,7 @@ static ssize_t show_adaptive_cur_freq(struct kobject *kobj,
 	int ret;
 
 	if (!grp->cpucp_enabled)
-		return scnprintf(buf, PAGE_SIZE, "%lu\n", grp->adaptive_cur_freq);
+		return scnprintf(buf, PAGE_SIZE, "%u\n", grp->adaptive_cur_freq);
 
 	if (!ops)
 		return -ENODEV;
@@ -651,7 +651,7 @@ static ssize_t show_adaptive_cur_freq(struct kobject *kobj,
 		return ret;
 	}
 	memcpy(&adaptive_cur_freq, &msg, sizeof(adaptive_cur_freq));
-	return scnprintf(buf, PAGE_SIZE, "%lu\n", le32_to_cpu(adaptive_cur_freq));
+	return scnprintf(buf, PAGE_SIZE, "%u\n", le32_to_cpu(adaptive_cur_freq));
 }
 
 show_grp_attr(sampling_cur_freq);
@@ -1476,13 +1476,15 @@ static int configure_cpucp_mon(struct memlat_mon *mon)
 	struct device_node *of_node = mon->dev->of_node;
 	int ret;
 	const char c = ':';
+	const char *p;
 
 	msg.cpumask = mon->cpus_mpidr;
 	msg.hw_type = grp->hw_type;
 	msg.mon_type = mon->is_compute;
 	msg.mon_idx = mon->index;
-	if ((strrchr(dev_name(mon->dev), c) + 1))
-		scnprintf(msg.mon_name, MAX_NAME_LEN, "%s", (strrchr(dev_name(mon->dev), c) + 1));
+	p = strrchr(dev_name(mon->dev), c);
+	if (p)
+		scnprintf(msg.mon_name, MAX_NAME_LEN, "%s", p + 1);
 	ret = ops->set_param(memlat_data->ph, &msg,
 			MEMLAT_ALGO_STR, MEMLAT_SET_MONITOR, sizeof(msg));
 	if (ret < 0) {
@@ -1758,7 +1760,7 @@ static int memlat_dev_probe(struct platform_device *pdev)
 			if (!ret)
 				continue;
 			if (ret != -EPROBE_DEFER) {
-				dev_err(dev, "ev=%lu not found on cpu%d: %d\n",
+				dev_err(dev, "ev=%u not found on cpu%d: %d\n",
 						event_id, cpu, ret);
 				if (event_id == INST_EV || event_id == CYC_EV)
 					return ret;
@@ -1912,7 +1914,7 @@ static int memlat_grp_probe(struct platform_device *pdev)
 			if (!ret)
 				continue;
 			if (ret != -EPROBE_DEFER)
-				dev_err(dev, "ev=%lu not found on cpu%d: %d\n",
+				dev_err(dev, "ev=%u not found on cpu%d: %d\n",
 						event_id, cpu, ret);
 			return ret;
 		}

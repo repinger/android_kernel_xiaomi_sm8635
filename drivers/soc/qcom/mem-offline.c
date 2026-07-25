@@ -298,8 +298,8 @@ static int send_msg(struct memory_notify *mn, bool online, int count)
 			goto undo;
 		}
 
-		pr_info("mem-offline: sent msg successfully to %s segment at phys addr 0x%lx\n",
-					online ? "online" : "offline", __pfn_to_phys(start));
+		pr_info("mem-offline: sent msg successfully to %s segment at phys addr 0x%llx\n",
+					online ? "online" : "offline", (unsigned long long)__pfn_to_phys(start));
 		addr += segment_size;
 	}
 
@@ -448,7 +448,7 @@ static int mem_change_refresh_state(struct memory_notify *mn,
 
 	if (mem_sec_state[idx] == state) {
 		/* we shouldn't be getting this request */
-		pr_warn("mem-offline: state of mem%d block already in %s state. Ignoring refresh state change request\n",
+		pr_warn("mem-offline: state of mem%lu block already in %s state. Ignoring refresh state change request\n",
 				sec_nr, online ? "online" : "offline");
 		return 0;
 	}
@@ -568,7 +568,7 @@ static int mem_event_callback(struct notifier_block *self,
 		pr_info("mem-offline: Onlined memory block mem%pK\n",
 			(void *)sec_nr);
 		seg_idx = get_segment_addr_to_idx(start_addr);
-		pr_debug("mem-offline: Segment %d memblk_bitmap 0x%lx\n",
+		pr_debug("mem-offline: Segment %d memblk_bitmap 0x%x\n",
 				seg_idx, segment_infos[seg_idx].bitmask_kernel_blk);
 		totalram_pages_add(-(memory_block_size_bytes()/PAGE_SIZE));
 		break;
@@ -598,7 +598,7 @@ static int mem_event_callback(struct notifier_block *self,
 		pr_info("mem-offline: Offlined memory block mem%pK\n",
 			(void *)sec_nr);
 		seg_idx = get_segment_addr_to_idx(start_addr);
-		pr_debug("mem-offline: Segment %d memblk_bitmap 0x%lx\n",
+		pr_debug("mem-offline: Segment %d memblk_bitmap 0x%x\n",
 				seg_idx, segment_infos[seg_idx].bitmask_kernel_blk);
 		totalram_pages_add(memory_block_size_bytes()/PAGE_SIZE);
 		del_timer_sync(&mem_offline_timeout_timer);
@@ -630,7 +630,7 @@ static int mem_online_remaining_blocks(void)
 	phys_addr_t phys_addr;
 	int fail = 0;
 
-	pr_debug("mem-offline: memblock_end_of_DRAM 0x%lx\n", memblock_end_of_DRAM());
+	pr_debug("mem-offline: memblock_end_of_DRAM 0x%llx\n", (unsigned long long)memblock_end_of_DRAM());
 
 	block_size = memory_block_size_bytes();
 	sections_per_block = block_size / MIN_MEMORY_BLOCK_SIZE;
@@ -646,7 +646,7 @@ static int mem_online_remaining_blocks(void)
 	if (memblock_end_of_DRAM() % block_size) {
 		delta = block_size - (memblock_end_of_DRAM() % block_size);
 		pr_err("mem-offline: !!ERROR!! memblock end of dram address is not aligned to memory block size!\n");
-		pr_err("mem-offline: memory%lu could be partially available. %lukB of memory will be missing from RAM!\n",
+		pr_err("mem-offline: memory%lu could be partially available. %ukB of memory will be missing from RAM!\n",
 				start_section_nr, delta / SZ_1K);
 
 		/*
@@ -662,7 +662,7 @@ static int mem_online_remaining_blocks(void)
 	if (bootmem_dram_end_addr % block_size) {
 		delta = bootmem_dram_end_addr % block_size;
 		pr_err("mem-offline: !!ERROR!! bootmem end of dram address is not aligned to memory block size!\n");
-		pr_err("mem-offline: memory%lu will not be added. %lukB of memory will be missing from RAM!\n",
+		pr_err("mem-offline: memory%lu will not be added. %ukB of memory will be missing from RAM!\n",
 				end_section_nr, delta / SZ_1K);
 
 		/*
@@ -682,8 +682,8 @@ static int mem_online_remaining_blocks(void)
 	if (start_section_nr > end_section_nr)
 		return 1;
 
-	pr_debug("mem-offline: offlinable_region_start_addr 0X%lx\n",
-		offlinable_region_start_addr);
+	pr_debug("mem-offline: offlinable_region_start_addr 0X%llx\n",
+		(unsigned long long)offlinable_region_start_addr);
 
 	for (memblock = start_section_nr; memblock <= end_section_nr;
 			memblock += sections_per_block) {
@@ -793,7 +793,7 @@ static ssize_t show_mem_offline_granule(struct kobject *kobj,
 static ssize_t show_differing_seg_sizes(struct kobject *kobj,
 				struct kobj_attribute *attr, char *buf)
 {
-	return scnprintf(buf, PAGE_SIZE, "%lu\n",
+	return scnprintf(buf, PAGE_SIZE, "%u\n",
 			(unsigned int)differing_segment_sizes);
 }
 
@@ -840,8 +840,8 @@ static unsigned int print_blk_residency_times(char *buf, size_t sz,
 			delta = 0;
 		delta = ktime_add(delta,
 			mem_info[i + mode * idx].resident_time);
-		c += scnprintf(buf + c, sz - c, "%lus\t\t",
-				ktime_to_us(delta) / USEC_PER_SEC);
+		c += scnprintf(buf + c, sz - c, "%llds\t\t",
+				(s64)(ktime_to_us(delta) / USEC_PER_SEC));
 		total_time[i + mode * idx] = delta;
 	}
 	return c;
@@ -958,11 +958,11 @@ static ssize_t show_mem_stats(struct kobject *kobj,
 	total_offline = ktime_sub(total, total_online);
 
 	c += scnprintf(buf + c, sz - c,
-					"\tAvg Online %%:\t%d%%\n",
-					((int)total_online * 100) / total);
+					"\tAvg Online %%:\t%lld%%\n",
+					(s64)(((int)total_online * 100) / total));
 	c += scnprintf(buf + c, sz - c,
-					"\tAvg Offline %%:\t%d%%\n",
-					((int)total_offline * 100) / total);
+					"\tAvg Offline %%:\t%lld%%\n",
+					(s64)(((int)total_offline * 100) / total));
 
 	c += scnprintf(buf + c, sz - c, "\n");
 	kfree(total_time);
@@ -972,7 +972,7 @@ static ssize_t show_mem_stats(struct kobject *kobj,
 static ssize_t show_anon_migrate(struct kobject *kobj,
 				struct kobj_attribute *attr, char *buf)
 {
-	return scnprintf(buf, PAGE_SIZE, "%lu\n",
+	return scnprintf(buf, PAGE_SIZE, "%d\n",
 				atomic_read(&target_migrate_pages));
 }
 
@@ -1618,7 +1618,7 @@ static int get_ddr_regions_info(void)
 
 	for (i = 0; i < num_ddr_regions; i++) {
 
-		pr_info("region%d: seg_start 0x%lx len 0x%lx granule 0x%lx seg_start_offset 0x%lx seg_start_idx 0x%lx\n",
+		pr_info("region%d: seg_start 0x%lx len 0x%lx granule 0x%lx seg_start_offset 0x%lx seg_start_idx %u\n",
 				i, ddr_regions[i].start_address, ddr_regions[i].length,
 				ddr_regions[i].granule_size,
 				ddr_regions[i].segments_start_offset,
@@ -1702,7 +1702,7 @@ static int update_dram_end_address_and_movable_bitmap(phys_addr_t *bootmem_dram_
 	}
 
 	*bootmem_dram_end_addr = addr;
-	pr_debug("mem-offline: bootmem_dram_end_addr 0x%lx\n", *bootmem_dram_end_addr);
+	pr_debug("mem-offline: bootmem_dram_end_addr 0x%llx\n", (unsigned long long)*bootmem_dram_end_addr);
 
 	num_entries = num_cells / (nr_address_cells + nr_size_cells);
 	pos = prop->value;

@@ -67,7 +67,7 @@ static ssize_t show_enable_dynpf(struct kobject *kobj,
 	if (ret < 0)
 		return ret;
 
-	return scnprintf(buf, PAGE_SIZE, "%lu\n", le32_to_cpu(val));
+	return scnprintf(buf, PAGE_SIZE, "%u\n", le32_to_cpu(val));
 }
 
 DYNPF_ATTR_RW(enable_dynpf);

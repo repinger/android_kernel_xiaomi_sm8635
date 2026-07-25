@@ -415,7 +415,7 @@ static void qmi_invoke_handler(struct qmi_handle *qmi, struct sockaddr_qrtr *sq,
 
 	dest = kzalloc(handler->decoded_size, GFP_KERNEL);
 	if (!dest) {
-		QMI_INFO("failed to allocate memory of decoded_size: 0x%x svc_id:0x%x\n",
+		QMI_INFO("failed to allocate memory of decoded_size: 0x%zx svc_id:0x%x\n",
 			 handler->decoded_size, qmi->svc_id);
 		return;
 	}

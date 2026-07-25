@@ -1643,13 +1643,14 @@ static void battery_chg_update_usb_type_work(struct work_struct *work)
 
 		pr_debug("usb_adap_type: %u\n", pst->prop[USB_ADAP_TYPE]);
 
-		switch (pst->prop[USB_ADAP_TYPE]) {
 		if (bcdev->report_power_absent == 1
 			&& pst->prop[USB_ADAP_TYPE] != POWER_SUPPLY_USB_TYPE_UNKNOWN) {
 			desc->type = POWER_SUPPLY_TYPE_UNKNOWN;
-			break;
+			continue;
 		}
-                case POWER_SUPPLY_TYPE_UNKNOWN:
+
+		switch (pst->prop[USB_ADAP_TYPE]) {
+		case POWER_SUPPLY_TYPE_UNKNOWN:
 			desc->type = POWER_SUPPLY_TYPE_UNKNOWN;
 			break;
 		case POWER_SUPPLY_USB_TYPE_SDP:
@@ -1967,7 +1968,7 @@ static int battery_chg_callback(void *priv, void *data, size_t len)
 	down_read(&bcdev->state_sem);
 	if (!bcdev->initialized) {
 		pr_debug("Driver initialization failed: Dropping glink callback message: state %d\n",
-			 bcdev->state);
+			 atomic_read(&bcdev->state));
 		up_read(&bcdev->state_sem);
 		return 0;
 	}
@@ -7127,7 +7128,7 @@ static ssize_t request_vdm_cmd_show(struct class *c,
 			return rc;
 		for (i = 0; i < USBPD_UVDM_SS_LEN; i++) {
 			memset(data, 0, sizeof(data));
-			snprintf(data, sizeof(data), "%08lx", bcdev->ss_auth_data[i]);
+			snprintf(data, sizeof(data), "%08x", bcdev->ss_auth_data[i]);
 			strlcat(str_buf, data, sizeof(str_buf));
 		}
 		return snprintf(buf, PAGE_SIZE, "%d,%s", cmd, str_buf);

@@ -60,7 +60,7 @@ static int qcom_scmi_get_param(const struct scmi_protocol_handle *ph, void *buf,
 	memcpy(msg, buf, tx_size);
 	ret = ph->xops->do_xfer(ph, t);
 	if (t->rx.len > rx_size) {
-		pr_err("SCMI received buffer size %d is more than expected size %d\n",
+		pr_err("SCMI received buffer size %zu is more than expected size %zu\n",
 			t->rx.len, rx_size);
 		return -EMSGSIZE;
 	}

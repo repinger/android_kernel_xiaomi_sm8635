@@ -847,7 +847,7 @@ static void msm_geni_enable_disable_se_clk(struct uart_port *uport, bool enable)
 	struct msm_geni_serial_port *msm_port = GET_DEV_PORT(uport);
 
 	UART_LOG_DBG(msm_port->ipc_log_misc, msm_port->uport.dev,
-		"%s: enable:%d ser_clk_cfg:0x%x\n", __func__, enable,
+		"%s: enable:%d ser_clk_cfg:0x%lx\n", __func__, enable,
 		msm_port->ser_clk_cfg);
 
 	if (enable) {
@@ -6412,7 +6412,7 @@ static void msm_geni_serial_ssr_down(struct device *dev)
 	ret = pm_runtime_force_suspend(uport->dev);
 	if (ret) {
 		UART_LOG_DBG(port->ipc_log_misc, dev, "%s:force suspend failed %d\n",
-			     ret, __func__);
+			     __func__, ret);
 		goto exit;
 	}
 

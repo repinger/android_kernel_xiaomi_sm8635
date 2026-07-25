@@ -1661,12 +1661,12 @@ static int _qcom_llcc_mem_verification(struct device *dev, struct slc_sct_mem *s
 	if (slc_status->program_status == SLC_SCT_DONE) {
 		if ((slc_status->version == SLC_SCT_MEM_LAYOUT_VERSION) &&
 		    slc_mem->slice_descs_count <= slc_mem->scid_max) {
-			dev_info(dev, "SCT initialized with slice descriptor : %d\n",
+			dev_info(dev, "SCT initialized with slice descriptor : %u\n",
 					slc_mem->slice_descs_count);
 			return 0;
 		} else if ((slc_status->version == SLC_SCT_MEM_LAYOUT_V1) &&
 			   slc_mem_v1->slice_descs_count <= slc_mem_v1->scid_max) {
-			dev_info(dev, "SCT initialized with slice descriptor : %d\n",
+			dev_info(dev, "SCT initialized with slice descriptor : %u\n",
 					slc_mem_v1->slice_descs_count);
 			return 0;
 		}
@@ -1675,7 +1675,7 @@ static int _qcom_llcc_mem_verification(struct device *dev, struct slc_sct_mem *s
 		switch (slc_status->version) {
 		case SLC_SCT_MEM_LAYOUT_VERSION:
 		case SLC_SCT_MEM_LAYOUT_V1:
-			dev_err(dev, "SCT Initialization failed with error : %d and param: %d\n",
+			dev_err(dev, "SCT Initialization failed with error : %llu and param: %llu\n",
 					slc_status->error.code, slc_status->error.param);
 			break;
 		default:

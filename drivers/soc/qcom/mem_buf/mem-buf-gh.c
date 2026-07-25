@@ -173,7 +173,7 @@ static int mem_buf_rmt_alloc_dmaheap_mem(struct mem_buf_xfer_mem *xfer_mem)
 
 	dmabuf = dma_heap_buffer_alloc(heap, xfer_mem->size, flags, 0);
 	if (IS_ERR(dmabuf)) {
-		pr_err("%s dmaheap_alloc failure sz: 0x%x heap: %s flags: 0x%x rc: %d\n",
+		pr_err("%s dmaheap_alloc failure sz: %#zx heap: %s flags: %#x rc: %ld\n",
 		       __func__, xfer_mem->size, name, flags,
 		       PTR_ERR(dmabuf));
 		return PTR_ERR(dmabuf);
@@ -181,7 +181,7 @@ static int mem_buf_rmt_alloc_dmaheap_mem(struct mem_buf_xfer_mem *xfer_mem)
 
 	attachment = dma_buf_attach(dmabuf, mem_buf_dev);
 	if (IS_ERR(attachment)) {
-		pr_err("%s dma_buf_attach failure rc: %d\n",  __func__,
+		pr_err("%s dma_buf_attach failure rc: %ld\n",  __func__,
 		       PTR_ERR(attachment));
 		dma_buf_put(dmabuf);
 		return PTR_ERR(attachment);
@@ -189,7 +189,7 @@ static int mem_buf_rmt_alloc_dmaheap_mem(struct mem_buf_xfer_mem *xfer_mem)
 
 	mem_sgt = dma_buf_map_attachment(attachment, DMA_BIDIRECTIONAL);
 	if (IS_ERR(mem_sgt)) {
-		pr_err("%s dma_buf_map_attachment failure rc: %d\n", __func__,
+		pr_err("%s dma_buf_map_attachment failure rc: %ld\n", __func__,
 		       PTR_ERR(mem_sgt));
 		dma_buf_detach(dmabuf, attachment);
 		dma_buf_put(dmabuf);
@@ -487,7 +487,7 @@ struct mem_buf_xfer_mem *mem_buf_prep_xfer_mem(void *req_msg)
 	}
 	mem_type_data = mem_buf_alloc_xfer_mem_type_data(mem_type, arb_payload);
 	if (IS_ERR(mem_type_data)) {
-		pr_err("%s: failed to allocate mem type specific data: %d\n",
+		pr_err("%s: failed to allocate mem type specific data: %ld\n",
 		       __func__, PTR_ERR(mem_type_data));
 		ret = PTR_ERR(mem_type_data);
 		goto err_alloc_xfer_mem_type_data;

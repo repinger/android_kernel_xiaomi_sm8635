@@ -203,7 +203,7 @@ static int usb_transfer_small_packet(struct byte_cntr *drvdata, size_t *small_si
 			atomic_dec(&drvdata->usb_free_buf);
 		} else {
 			dev_err_ratelimited(&tmcdrvdata->csdev->dev,
-			"Drop data, offset = %d, len = %d\n",
+			"Drop data, offset = %lu, len = %zu\n",
 				drvdata->offset, req_size);
 			tmcdrvdata->usb_data->drop_data_size += actual;
 			kfree(usb_req);
@@ -327,7 +327,7 @@ static void usb_read_work_fn(struct work_struct *work)
 
 			} else {
 				dev_err_ratelimited(&tmcdrvdata->csdev->dev,
-				"Drop data, offset = %d, seq = %d, irq = %d\n",
+				"Drop data, offset = %lu, seq = %d, irq = %d\n",
 					drvdata->offset, seq,
 					atomic_read(&drvdata->irq_cnt));
 				tmcdrvdata->usb_data->drop_data_size += actual_total;

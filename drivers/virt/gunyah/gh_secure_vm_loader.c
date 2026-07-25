@@ -242,7 +242,7 @@ static int gh_vm_loader_sec_load(struct gh_sec_vm_dev *vm_dev,
 				metadata_size, 0, 0, vm_dev->pas_id,
 				vm_dev->vm_name, vm);
 	if (ret)
-		dev_err(dev, "Configuring secure VM %s to memory failed %ld\n",
+		dev_err(dev, "Configuring secure VM %s to memory failed %d\n",
 					vm_dev->vm_name, ret);
 
 release_fw:

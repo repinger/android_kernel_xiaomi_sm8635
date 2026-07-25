@@ -204,7 +204,7 @@ static int ecm_nvmem_device_write(struct nvmem_device *nvmem,
 	u8 *ptr = buf;
 
 	for (i = 0; i < bytes; i++)
-		pr_debug("Wrote %#x to %#x\n", *ptr++, offset + i);
+		pr_debug("Wrote %#x to %#zx\n", *ptr++, (size_t)(offset + i));
 
 	return nvmem_device_write(nvmem, offset, bytes, buf);
 }
@@ -357,7 +357,7 @@ static void ecm_average_work(struct work_struct *work)
 	mutex_lock(&ecm->sdam_lock);
 
 	if (!data->num_m_samples || !data->m_cumulative) {
-		pr_warn_ratelimited("Invalid data, num_m_samples=%u m_cumulative:%u\n",
+		pr_warn_ratelimited("Invalid data, num_m_samples=%u m_cumulative:%llu\n",
 			data->num_m_samples, data->m_cumulative);
 		data->avg_current = 0;
 	} else {
@@ -689,7 +689,7 @@ static irqreturn_t sdam_full_irq_handler(int irq, void *_ecm)
 	}
 
 	if (!cumulative) {
-		pr_err("Error, No ECM samples captured. Cumulative:%lu\n",
+		pr_err("Error, No ECM samples captured. Cumulative:%llu\n",
 			cumulative);
 		goto irq_exit;
 	}

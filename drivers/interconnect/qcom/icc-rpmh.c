@@ -142,7 +142,7 @@ int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
 		if (clk_rate > 0) {
 			ret = clk_set_rate(qn->clk, clk_rate);
 			if (ret)
-				dev_warn(qp->dev, "Failed to set %s rate to %d for %s\n",
+				dev_warn(qp->dev, "Failed to set %s rate to %lld for %s\n",
 					 qn->clk_name, clk_rate, qn->name);
 
 			if (qn->toggle_clk && !qn->clk_enabled) {

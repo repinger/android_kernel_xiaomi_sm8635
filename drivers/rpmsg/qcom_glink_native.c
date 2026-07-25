@@ -1311,7 +1311,7 @@ static int qcom_glink_rx_data_zero_copy(struct qcom_glink *glink, size_t avail)
 		goto advance_rx;
 	}
 	if (intent->size) {
-		CH_ERR(channel, "zero copy req wrong intent liid:%d size:%d\n",
+		CH_ERR(channel, "zero copy req wrong intent liid:%d size:%zu\n",
 		       liid, intent->size);
 		goto advance_rx;
 	}
@@ -1321,10 +1321,10 @@ static int qcom_glink_rx_data_zero_copy(struct qcom_glink *glink, size_t avail)
 	len = le32_to_cpu(hdr.size);
 	data = qcom_glink_prepare_da_for_cpu(da, len);
 	if (!data) {
-		CH_ERR(channel, "failed to get va da:0x%llx len:%d\n", da, len);
+		CH_ERR(channel, "failed to get va da:0x%llx len:%u\n", da, len);
 		goto advance_rx;
 	}
-	CH_INFO(channel, "da:0x%llx va:0x%llx len:%d\n", da, data, len);
+	CH_INFO(channel, "da:0x%llx va:%p len:%u\n", da, data, len);
 
 	intent->data = data;
 	intent->offset = len;

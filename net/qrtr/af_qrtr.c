@@ -815,7 +815,7 @@ static int qrtr_node_enqueue(struct qrtr_node *node, struct sk_buff *skb,
 		rc = skb_put_padto(skb, ALIGN(len, 4) + sizeof(*hdr));
 
 	if (rc) {
-		pr_err("%s: failed to pad size %lu to %lu rc:%d\n", __func__,
+		pr_err("%s: failed to pad size %u to %u rc:%d\n", __func__,
 		       skb->len, ALIGN(skb->len, 4), rc);
 	}
 
@@ -1005,7 +1005,7 @@ int qrtr_endpoint_post(struct qrtr_endpoint *ep, const void *data, size_t len)
 	if (!skb) {
 		skb = qrtr_get_backup(len);
 		if (!skb) {
-			pr_err("qrtr: Unable to get skb with len:%lu\n", len);
+			pr_err("qrtr: Unable to get skb with len:%zu\n", len);
 			return -ENOMEM;
 		}
 	}

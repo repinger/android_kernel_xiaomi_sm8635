@@ -172,7 +172,7 @@ static int __altmode_send_data(struct altmode_dev *amdev, void *data,
 	struct usbc_write_buffer_req_msg msg = { { 0 } };
 
 	if (len > sizeof(msg.buf)) {
-		pr_err("len %zu exceeds msg buf's size: %zu\n",
+		pr_err("len %zu exceeds msg buf's size: %d\n",
 				len, USBC_WRITE_BUFFER_SIZE);
 		return -EINVAL;
 	}
@@ -366,7 +366,7 @@ struct altmode_client *altmode_register_client(struct device *client_dev,
 	}
 
 	if (pargs.args[0] >= MAX_NUM_PORTS) {
-		dev_err(client_dev, "Invalid port_index: %d, max is %d\n",
+		dev_err(client_dev, "Invalid port_index: %u, max is %u\n",
 				pargs.args[0], MAX_NUM_PORTS - 1);
 		return ERR_PTR(-EINVAL);
 	}
@@ -554,7 +554,7 @@ static int altmode_callback(void *priv, void *data, size_t len)
 		break;
 	case USBC_NOTIFY_IND:
 		if (len != sizeof(*notify_msg)) {
-			altmode_dbg("Expected length %u, got: %zu\n",
+			altmode_dbg("Expected length %zu, got: %zu\n",
 					sizeof(*notify_msg), len);
 			return -EINVAL;
 		}
@@ -637,7 +637,7 @@ static int send_ack_write(void *data, u64 val)
 
 	rc = __altmode_send_data(amdev, &ack, sizeof(ack));
 	if (rc < 0) {
-		dev_err(amdev->dev, "port %d: Failed sending PAN ACK: %llu\n",
+		dev_err(amdev->dev, "port %llu: Failed sending PAN ACK: %d\n",
 				val, rc);
 		return rc;
 	}

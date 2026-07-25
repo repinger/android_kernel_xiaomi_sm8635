@@ -202,8 +202,8 @@ struct sysmon_dcvs_client_info {
 	bool mips_set_latency;
 	/**< Flag for validtity of latency */
 
-	bool set_sleep_disable;
-	/**< TRUE if LPM level request has to be considered */
+	unsigned char set_sleep_disable;
+	/**< LPM level request */
 
 	unsigned char sleep_disable;
 	/**< LPM level request */

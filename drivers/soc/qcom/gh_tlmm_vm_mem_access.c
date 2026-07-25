@@ -342,7 +342,7 @@ static int gh_tlmm_vm_mem_access_probe(struct platform_device *pdev)
 		mem_cookie = gh_mem_notifier_register(GH_MEM_NOTIFIER_TAG_TLMM,
 					gh_tlmm_vm_mem_on_release_handler, &gh_tlmm_vm_info_data);
 		if (IS_ERR(mem_cookie)) {
-			dev_err(gh_tlmm_dev, "Failed to register on release notifier%d\n",
+			dev_err(gh_tlmm_dev, "Failed to register on release notifier%ld\n",
 						PTR_ERR(mem_cookie));
 			return -EINVAL;
 		}

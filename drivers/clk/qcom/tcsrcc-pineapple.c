@@ -23,8 +23,6 @@
 #include "clk-regmap-mux.h"
 #include "common.h"
 #include "reset.h"
-#include "vdd-level.h"
-
 static struct clk_branch tcsr_pcie_0_clkref_en = {
 	.halt_reg = 0xb1100,
 	.halt_check = BRANCH_HALT_DELAY,

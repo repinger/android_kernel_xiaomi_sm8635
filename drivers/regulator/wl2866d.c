@@ -301,7 +301,7 @@ static int wl2866d_register_ldo(struct wl2866d_regulator *wl2866d_reg,
 	else if (!strcmp(vdd_type, "avdd"))
 		wl2866d_reg->type = VDD_TYPE_AVDD;
 	else {
-		wl2866d_err(wl2866d_reg, "invalid regulator type %s\n",
+		wl2866d_err(wl2866d_reg, "invalid regulator type %u\n",
 			    wl2866d_reg->type);
 		return -EINVAL;
 	}

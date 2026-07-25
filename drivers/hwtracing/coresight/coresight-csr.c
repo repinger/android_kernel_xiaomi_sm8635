@@ -664,7 +664,7 @@ static ssize_t flushperiod_show(struct device *dev,
 		return -EINVAL;
 	}
 
-	return scnprintf(buf, PAGE_SIZE, "%#lx\n", drvdata->flushperiod);
+	return scnprintf(buf, PAGE_SIZE, "%#x\n", drvdata->flushperiod);
 }
 
 static ssize_t flushperiod_store(struct device *dev,
@@ -712,7 +712,7 @@ static ssize_t hbeat_val0_show(struct device *dev,
 	if (IS_ERR_OR_NULL(drvdata) || !drvdata->timestamp_support)
 		return -EINVAL;
 
-	return scnprintf(buf, PAGE_SIZE, "%lx\n", drvdata->hbeat_val0);
+	return scnprintf(buf, PAGE_SIZE, "%llx\n", drvdata->hbeat_val0);
 }
 
 static ssize_t hbeat_val0_store(struct device *dev,
@@ -755,7 +755,7 @@ static ssize_t hbeat_val1_show(struct device *dev,
 	if (IS_ERR_OR_NULL(drvdata) || !drvdata->timestamp_support)
 		return -EINVAL;
 
-	return scnprintf(buf, PAGE_SIZE, "%lx\n", drvdata->hbeat_val1);
+	return scnprintf(buf, PAGE_SIZE, "%llx\n", drvdata->hbeat_val1);
 }
 
 static ssize_t hbeat_val1_store(struct device *dev,
@@ -798,7 +798,7 @@ static ssize_t hbeat_mask0_show(struct device *dev,
 	if (IS_ERR_OR_NULL(drvdata) || !drvdata->timestamp_support)
 		return -EINVAL;
 
-	return scnprintf(buf, PAGE_SIZE, "%lx\n", drvdata->hbeat_mask0);
+	return scnprintf(buf, PAGE_SIZE, "%llx\n", drvdata->hbeat_mask0);
 }
 
 static ssize_t hbeat_mask0_store(struct device *dev,
@@ -841,7 +841,7 @@ static ssize_t hbeat_mask1_show(struct device *dev,
 	if (IS_ERR_OR_NULL(drvdata) || !drvdata->timestamp_support)
 		return -EINVAL;
 
-	return scnprintf(buf, PAGE_SIZE, "%lx\n", drvdata->hbeat_mask1);
+	return scnprintf(buf, PAGE_SIZE, "%llx\n", drvdata->hbeat_mask1);
 }
 
 static ssize_t hbeat_mask1_store(struct device *dev,

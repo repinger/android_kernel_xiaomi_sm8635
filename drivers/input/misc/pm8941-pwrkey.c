@@ -245,7 +245,7 @@ static irqreturn_t pm8941_pwrkey_irq(int irq, void *_data)
 	if (pwrkey->sw_debounce_time_us) {
 		if (ktime_before(ktime_get(), pwrkey->sw_debounce_end_time)) {
 			dev_dbg(pwrkey->dev,
-				"ignoring key event received before debounce end %llu us\n",
+				"ignoring key event received before debounce end %lld us\n",
 				pwrkey->sw_debounce_end_time);
 			return IRQ_HANDLED;
 		}
@@ -555,7 +555,7 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
 		if (error)
 			dev_err(&pdev->dev, "failed to read PON_RT_STS rc=%d\n", error);
 		else
-			pr_info("KPDPWR status at init=0x%02x, KPDPWR_ON=%d\n",
+			pr_info("KPDPWR status at init=0x%02x, KPDPWR_ON=%lu\n",
 				sts, (sts & PON_KPDPWR_N_SET));
 	}
 

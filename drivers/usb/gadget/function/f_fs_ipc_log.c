@@ -244,7 +244,7 @@ static int exit_ffs_epfile_io(struct kretprobe_instance *ri, struct pt_regs *reg
 	unsigned long ret = regs_return_value(regs);
 	void *context = get_ipc_context(epfile->ffs);
 
-	kprobe_log(context, "exit: %s ret %zd", epfile->name, ret);
+	kprobe_log(context, "exit: %s ret %lu", epfile->name, ret);
 	return 0;
 }
 
@@ -308,7 +308,7 @@ static int exit_ffs_epfile_read_iter(struct kretprobe_instance *ri,
 	void *context = get_ipc_context(epfile->ffs);
 	unsigned long ret = regs_return_value(regs);
 
-	kprobe_log(context, "exit: ret %zd", ret);
+	kprobe_log(context, "exit: ret %lu", ret);
 	return 0;
 }
 
@@ -369,7 +369,7 @@ static int entry_ffs_ep0_write(struct kretprobe_instance *ri,
 	void *context = get_ipc_context(ffs);
 
 	data->x0 = file;
-	kprobe_log(context, "enter:len %zu state %d setup_state %d flags %lu",
+	kprobe_log(context, "enter:len %u state %d setup_state %d flags %lu",
 		len, ffs->state, ffs->setup_state, ffs->flags);
 	return 0;
 }
@@ -386,7 +386,7 @@ static int exit_ffs_ep0_write(struct kretprobe_instance *ri,
 
 	if (ret != -EIDRM && ret != -EINVAL)
 		kprobe_log(context,
-			"exit:ret %zd state %d setup_state %d flags %lu",
+			"exit:ret %lu state %d setup_state %d flags %lu",
 			ret, ffs->state, ffs->setup_state, ffs->flags);
 
 	return 0;
@@ -418,7 +418,7 @@ static int exit_ffs_ep0_read(struct kretprobe_instance *ri,
 	void *context = get_ipc_context(ffs);
 	unsigned long ret = regs_return_value(regs);
 
-	kprobe_log(context, "exit:ret %d state %d setup_state %d flags %lu",
+	kprobe_log(context, "exit:ret %lu state %d setup_state %d flags %lu",
 		ret, ffs->state, ffs->setup_state, ffs->flags);
 	return 0;
 }
@@ -499,7 +499,7 @@ static int exit_ffs_aio_cancel(struct kretprobe_instance *ri,
 	struct ffs_epfile *epfile = kiocb->ki_filp->private_data;
 	void *context = get_ipc_context(epfile->ffs);
 
-	kprobe_log(context, "exit: mask %u", ret);
+	kprobe_log(context, "exit: mask %lu", ret);
 	return 0;
 }
 
@@ -543,7 +543,7 @@ static int exit_ffs_epfile_ioctl(struct kretprobe_instance *ri,
 	struct ffs_epfile *epfile = file->private_data;
 	void *context = get_ipc_context(epfile->ffs);
 
-	kprobe_log(context, "exit: %s: ret %d\n", epfile->name, ret);
+	kprobe_log(context, "exit: %s: ret %lu\n", epfile->name, ret);
 	return 0;
 }
 
@@ -604,7 +604,7 @@ static int exit_functionfs_bind(struct kretprobe_instance *ri,
 	void *context = get_ipc_context(ffs);
 	unsigned long ret = regs_return_value(regs);
 
-	kprobe_log(context, "functionfs_bind returned %d", ret);
+	kprobe_log(context, "functionfs_bind returned %lu", ret);
 	return 0;
 }
 

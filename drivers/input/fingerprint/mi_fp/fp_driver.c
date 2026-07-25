@@ -412,7 +412,7 @@ static long fp_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 				       vendor_name);
 				return -EPERM;
 			}
-			pr_err("regulater addr is %d", fp_dev->vreg);
+			pr_err("regulater addr is %p", fp_dev->vreg);
 			if (IS_ERR(fp_dev->vreg)) {
 				return -EPERM;
 			}

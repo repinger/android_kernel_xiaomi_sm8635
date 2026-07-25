@@ -265,15 +265,15 @@ int pmic_glink_write(struct pmic_glink_client *client, void *data,
 
 	if (rc < 0)
 		pr_err("Failed to send data [%*ph] for client %s, rc=%d\n",
-			len, data, client->name, rc);
+			(int)len, data, client->name, rc);
 
 	if (!rc && client->pgdev->log_enable) {
 		struct pmic_glink_hdr *hdr = data;
 
 		if (client->pgdev->log_filter == hdr->owner)
-			pr_info("Tx data: %*ph\n", len, data);
+			pr_info("Tx data: %*ph\n", (int)len, data);
 		else if (client->pgdev->log_filter == 65535)
-			pr_info("[%u] Tx data: %*ph\n", hdr->owner, len, data);
+			pr_info("[%u] Tx data: %*ph\n", hdr->owner, (int)len, data);
 	}
 
 	return rc;
@@ -412,9 +412,9 @@ static void pmic_glink_rx_callback(struct pmic_glink_dev *pgdev,
 
 	if (pgdev->log_enable) {
 		if (pgdev->log_filter == hdr->owner)
-			pr_info("Rx data: %*ph\n", pbuf->len, pbuf->buf);
+			pr_info("Rx data: %*ph\n", (int)pbuf->len, pbuf->buf);
 		else if (pgdev->log_filter == 65535)
-			pr_info("[%u] Rx data: %*ph\n", hdr->owner, pbuf->len,
+			pr_info("[%u] Rx data: %*ph\n", hdr->owner, (int)pbuf->len,
 				pbuf->buf);
 	}
 
@@ -530,7 +530,7 @@ static void pmic_glink_add_debugfs(struct pmic_glink_dev *pgdev)
 
 	dir = debugfs_create_dir(dev_name(pgdev->dev), NULL);
 	if (IS_ERR(dir)) {
-		pr_err("Failed to create pmic_glink debugfs directory rc=%d\n",
+		pr_err("Failed to create pmic_glink debugfs directory rc=%ld\n",
 			PTR_ERR(dir));
 		return;
 	}

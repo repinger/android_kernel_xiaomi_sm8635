@@ -234,7 +234,7 @@ static int gh_show_wdt_status(struct msm_watchdog_data *wdog_dd)
 			hret, ret);
 	} else {
 		dev_err(wdog_dd->dev,
-			"vWdog-CTL: %d, vWdog-time since last pet: %d, vWdog-expired status: %d\n",
+			"vWdog-CTL: %ld, vWdog-time since last pet: %ld, vWdog-expired status: %ld\n",
 			res.a1 & 1, res.a2, (res.a1 >> 31) & 1);
 	}
 

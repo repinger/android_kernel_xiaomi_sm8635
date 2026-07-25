@@ -55,15 +55,15 @@ static int bcl_lvl_show(struct seq_file *s, void *data)
 	seq_printf(s, "%-30s: %d\n",
 					"Irq self cleared counter",
 					bcl_stat->self_cleared_counter);
-	seq_printf(s, "%-30s: %lu\n",
+	seq_printf(s, "%-30s: %llu\n",
 					"Max Mitigation at", bcl_stat->max_mitig_ts);
-	seq_printf(s, "%-30s: %lu usec\n",
+	seq_printf(s, "%-30s: %llu usec\n",
 					"Max Mitigation latency",
 					DIV_ROUND_UP(bcl_stat->max_mitig_latency,
 						NSEC_PER_USEC));
-	seq_printf(s, "%-30s: %lu usec\n",
+	seq_printf(s, "%-30s: %llu usec\n",
 					"BCL mitigation residency", bcl_stat->max_duration);
-	seq_printf(s, "%-30s: %lu usec\n",
+	seq_printf(s, "%-30s: %llu usec\n",
 					"Total residency",	bcl_stat->total_duration);
 	seq_printf(s, "Last %d iterations	:\n", BCL_HISTORY_COUNT);
 	seq_printf(s, "%s%10s%10s%15s%15s%16s\n", "idx", "ibat", "vbat",
@@ -85,7 +85,7 @@ static int bcl_lvl_show(struct seq_file *s, void *data)
 					bcl_stat->bcl_history[idx].clear_ts -
 					bcl_stat->bcl_history[idx].trigger_ts,
 					NSEC_PER_USEC);
-		seq_printf(s, "[%d]%10d%10d%15lu%15lu%16lu\n", idx,
+		seq_printf(s, "[%d]%10d%10d%15llu%15llu%16llu\n", idx,
 				bcl_stat->bcl_history[idx].ibat,
 				bcl_stat->bcl_history[idx].vbat,
 				bcl_stat->bcl_history[idx].trigger_ts,

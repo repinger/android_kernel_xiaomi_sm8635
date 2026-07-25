@@ -135,7 +135,7 @@ static void handle_qbg_dump_message(struct battery_dbg_dev *bd,
 	u32 buf_len;
 
 	if (len > sizeof(bd->qbg_dump)) {
-		pr_err("Incorrect length received: %zu expected: %u\n", len,
+		pr_err("Incorrect length received: %zu expected: %zu\n", len,
 			sizeof(bd->qbg_dump));
 		return;
 	}
@@ -313,7 +313,7 @@ static int active_show(struct seq_file *s, void *unused)
 
 	voter_mask = v->data.active_voter_mask;
 
-	seq_printf(s, "%#x\n", voter_mask);
+	seq_printf(s, "%#lx\n", voter_mask);
 
 	return 0;
 }

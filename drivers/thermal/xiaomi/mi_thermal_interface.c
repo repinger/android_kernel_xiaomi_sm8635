@@ -811,7 +811,7 @@ static int thermal_check_panel(struct device_node *np)
 
 	for (i = 0; i < count; i++) {
 		node = of_parse_phandle(np, "panel", i);
-		printk(KERN_ERR "%s: try to add of node panel: %s\n", __func__,
+		printk(KERN_ERR "%s: try to add of node panel: %p\n", __func__,
 		       node);
 		panel = of_drm_find_panel(node);
 		of_node_put(node);
@@ -826,7 +826,7 @@ static int thermal_check_panel(struct device_node *np)
 		pr_err("%s ERROR: Cannot fine prim_panel of node!", __func__);
 	}
 	printk(KERN_ERR
-	       "%s: count of panel in node PTR_ERR_prim_panel  is: %d\n",
+	       "%s: count of panel in node PTR_ERR_prim_panel  is: %ld\n",
 	       __func__, PTR_ERR(prim_panel));
 #if IS_ENABLED(CONFIG_HAVE_MULTI_SCREEN)
 find_sec_panel:
@@ -838,7 +838,7 @@ find_sec_panel:
 	}
 	for (i = 0; i < count; i++) {
 		node = of_parse_phandle(np, "panel1", i);
-		printk(KERN_ERR "%s: try to add of node panel1: %s\n", __func__,
+		printk(KERN_ERR "%s: try to add of node panel1: %p\n", __func__,
 		       node);
 		panel = of_drm_find_panel(node);
 		of_node_put(node);
@@ -851,7 +851,7 @@ find_sec_panel:
 		pr_err("%s ERROR: Cannot fine sec_panel of node!", __func__);
 	}
 	printk(KERN_ERR
-	       "%s: count of panel1 in node PTR_ERR_sec_panel  is: %d\n",
+	       "%s: count of panel1 in node PTR_ERR_sec_panel  is: %ld\n",
 	       __func__, PTR_ERR(sec_panel));
 #endif
 out:

@@ -478,8 +478,8 @@ static int qrtr_gunyah_share_mem(struct qrtr_gunyah_dev *qdev, gh_vmid_t self,
 	ret = qcom_scm_assign_mem(qdev->res.start, resource_size(&qdev->res),
 				  &srcvmids, dst_vmlist, ARRAY_SIZE(dst_vmlist));
 	if (ret) {
-		pr_err("%s: qcom_scm_assign_mem failed addr=%x size=%u err=%d\n",
-		       __func__, qdev->res.start, qdev->size, ret);
+		pr_err("%s: qcom_scm_assign_mem failed addr=%pa size=%zu err=%d\n",
+		       __func__, &qdev->res.start, qdev->size, ret);
 		return ret;
 	}
 
@@ -504,13 +504,13 @@ static int qrtr_gunyah_share_mem(struct qrtr_gunyah_dev *qdev, gh_vmid_t self,
 	ret = ghd_rm_mem_share(GH_RM_MEM_TYPE_NORMAL, GH_RM_MEM_SHARE_SANITIZE, qdev->label,
 			       acl, sgl, NULL, &qdev->memparcel);
 	if (ret) {
-		pr_err("%s: gh_rm_mem_share failed addr=%x size=%u err=%d\n",
-		       __func__, qdev->res.start, qdev->size, ret);
+		pr_err("%s: gh_rm_mem_share failed addr=%pa size=%zu err=%d\n",
+		       __func__, &qdev->res.start, qdev->size, ret);
 		/* Attempt to give resource back to HLOS */
 		if (qcom_scm_assign_mem(qdev->res.start, resource_size(&qdev->res),
 					&dstvmids, src_vmlist, ARRAY_SIZE(src_vmlist)))
-			pr_err("%s: qcom_scm_assign_mem failed addr=%x size=%u err=%d\n",
-			       __func__, qdev->res.start, qdev->size, ret);
+			pr_err("%s: qcom_scm_assign_mem failed addr=%pa size=%zu err=%d\n",
+			       __func__, &qdev->res.start, qdev->size, ret);
 	}
 
 	kfree(acl);
@@ -533,8 +533,8 @@ static void qrtr_gunyah_unshare_mem(struct qrtr_gunyah_dev *qdev,
 	ret = qcom_scm_assign_mem(qdev->res.start, resource_size(&qdev->res),
 				  &src_vmlist, dst_vmlist, 1);
 	if (ret)
-		pr_err("%s: qcom_scm_assign_mem failed addr=%x size=%u err=%d\n",
-		       __func__, qdev->res.start, resource_size(&qdev->res), ret);
+		pr_err("%s: qcom_scm_assign_mem failed addr=%pa size=%llu err=%d\n",
+		       __func__, &qdev->res.start, resource_size(&qdev->res), ret);
 }
 
 static int qrtr_gunyah_vm_cb(struct notifier_block *nb, unsigned long cmd, void *data)

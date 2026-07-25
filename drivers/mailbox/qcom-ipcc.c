@@ -298,9 +298,9 @@ static void qcom_ipcc_restore_unmask_irq(struct device *dev)
 		packed_id = qcom_ipcc_get_hwirq(qcom_ipcc_chan_info->client_id,
 				qcom_ipcc_chan_info->signal_id);
 		if (qcom_ipcc_chan_info->is_signal_enabled) {
-			dev_dbg(dev,
-				"%s: restore 0x%lx for client_id: %u signal_id: %u\n",
-				__func__, packed_id, qcom_ipcc_chan_info->client_id,
+		dev_dbg(dev,
+			"%s: restore 0x%x for client_id: %u signal_id: %u\n",
+			__func__, packed_id, qcom_ipcc_chan_info->client_id,
 				qcom_ipcc_chan_info->signal_id);
 			writel(packed_id,
 				ipcc->base + IPCC_REG_RECV_SIGNAL_ENABLE);

@@ -114,13 +114,13 @@ static int populate_bcm_data(struct device *dev, struct bcm_data *bcm,
 		return ret;
 	}
 	if (data_len != sizeof(*data)) {
-		dev_err(dev, "Bad data len for %s: %d\n", bcm_name, data_len);
+		dev_err(dev, "Bad data len for %s: %zu\n", bcm_name, data_len);
 		return -EINVAL;
 	}
 	bcm->unit = le32_to_cpu(data->unit) / 1000UL;
 	bcm->width = le16_to_cpu(data->width);
 	bcm->vcd = data->vcd;
-	dev_dbg(dev, "Got BCM %s: addr=%lu, unit=%lu, width=%lu, vcd=%lu\n",
+	dev_dbg(dev, "Got BCM %s: addr=%u, unit=%u, width=%u, vcd=%u\n",
 			bcm_name, bcm->addr, bcm->unit, bcm->width, bcm->vcd);
 
 	return 0;

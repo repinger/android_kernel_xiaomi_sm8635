@@ -320,7 +320,7 @@ static int qcom_cpuss_sleep_stats_show(struct seq_file *s, void *d)
 	u64 val;
 
 	val = readq_relaxed(reg);
-	seq_printf(s, "%ld\n", val);
+	seq_printf(s, "%lld\n", val);
 
 	return 0;
 }
@@ -335,7 +335,7 @@ static int qcom_cpuss_all_stats_show(struct seq_file *s, void *d)
 
 	list_for_each_entry(data, node1, node) {
 		count = readq_relaxed(data->reg);
-		seq_printf(s, "%s: %ld\n", data->mode_name, count);
+		seq_printf(s, "%s: %lld\n", data->mode_name, count);
 	}
 
 	return 0;

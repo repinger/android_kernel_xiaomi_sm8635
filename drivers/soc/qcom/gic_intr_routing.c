@@ -173,7 +173,7 @@ void gic_do_class_update_virtual(
 		val |= BIT(30);
 	if (is_class1)
 		val |= BIT(31);
-	pr_debug("Set class of hwirq: %d class: %#x\n", hwirq, val);
+	pr_debug("Set class of hwirq: %u class: %#x\n", hwirq, val);
 	writel_relaxed(val, reg);
 }
 
@@ -196,7 +196,7 @@ void gic_do_class_update_physical(
 	val |= class_bits_val << offset;
 	writel_relaxed(val, reg);
 	spin_unlock(&gic_class_lock);
-	pr_debug("Set class of hwirq: %d class: %#x\n", (irq + 32), val);
+	pr_debug("Set class of hwirq: %u class: %#x\n", (irq + 32), val);
 }
 
 void gic_do_class_update(
@@ -284,7 +284,7 @@ static void trace_gic_v3_set_affinity(void *unused, struct irq_data *d,
 	if (d->hwirq < 32 || d->hwirq >= MAX_IRQS)
 		return;
 
-	pr_debug("irq : %d mask: %*pb current affinity: %*pb\n",
+	pr_debug("irq : %lu mask: %*pb current affinity: %*pb\n",
 		d->hwirq, cpumask_pr_args(cpu_affinity),
 		cpumask_pr_args(current_affinity));
 
@@ -333,7 +333,7 @@ static void trace_gic_v3_set_affinity(void *unused, struct irq_data *d,
 		    !cpu_online(cpu) &&
 		    cpumask_test_cpu(cpu,
 		    &gic_routing_data.gic_routing_class0_cpus)) {
-			pr_debug("Affinity broken class 0 irq: %d\n", d->hwirq);
+			pr_debug("Affinity broken class 0 irq: %lu\n", d->hwirq);
 			return;
 		}
 	}
@@ -345,7 +345,7 @@ static void trace_gic_v3_set_affinity(void *unused, struct irq_data *d,
 		    !cpu_online(cpu) &&
 		    cpumask_test_cpu(cpu,
 		    &gic_routing_data.gic_routing_class1_cpus)){
-			pr_debug("Affinity broken class 1 irq: %d\n", d->hwirq);
+			pr_debug("Affinity broken class 1 irq: %lu\n", d->hwirq);
 			return;
 		}
 	}
@@ -361,7 +361,7 @@ static void trace_gic_v3_set_affinity(void *unused, struct irq_data *d,
 	    !cpumask_equal(&gic_routing_data.gic_routing_class0_cpus, cpu_affinity) &&
 	    !cpumask_equal(&gic_routing_data.gic_routing_class1_cpus, cpu_affinity) &&
 	    !cpumask_equal(&all_cpus, cpu_affinity)) {
-		pr_debug("irq: %d has subset affinity, skip class setting\n", d->hwirq);
+		pr_debug("irq: %lu has subset affinity, skip class setting\n", d->hwirq);
 		goto clear_class;
 	}
 
@@ -616,7 +616,7 @@ void gic_irq_handler_entry_notifer(void *ignore, int irq,
 			irq_data_get_effective_affinity_mask(data);
 		if (!cpumask_equal(effective_affinity,
 		    desc->irq_common_data.affinity)) {
-			pr_debug("Update effective affinity %d mask: %*pb irq: %d\n",
+			pr_debug("Update effective affinity %u mask: %*pb irq: %d\n",
 			  hwirq,
 			  cpumask_pr_args(desc->irq_common_data.affinity),
 			  irq);

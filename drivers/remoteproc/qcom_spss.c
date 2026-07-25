@@ -103,7 +103,7 @@ static void read_sp2cl_debug_registers(struct qcom_spss *spss)
 	for (iter = 0; iter < NUM_OF_DEBUG_REGISTERS_READ; iter++) {
 		addr = ioremap(debug_register_addr[iter], sizeof(uint32_t)*2);
 		if (!addr) {
-			dev_err(spss->dev, "Iteration: [0x%x], addr: [0x%x]\n", iter, addr);
+			dev_err(spss->dev, "Iteration: [0x%x], addr: [%p]\n", iter, addr);
 			continue;
 		}
 		dev_info(spss->dev, "Iteration: [0x%x], Debug Data1: [0x%x], Debug Data2: [0x%x]\n",
@@ -552,7 +552,7 @@ static void *spss_da_to_va(struct rproc *rproc, u64 da, size_t len, bool *is_iom
 
 	offset = da - spss->mem_reloc;
 	if (offset < 0 || offset + len > spss->mem_size) {
-		dev_err(&rproc->dev, "offset: %llx, da: %llx, len: %llx\n", offset, da, len);
+		dev_err(&rproc->dev, "offset: %d, da: %llx, len: %zu\n", offset, da, len);
 		return NULL;
 	}
 
